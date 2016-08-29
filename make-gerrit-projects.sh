@@ -87,3 +87,7 @@ git -C project-configs git add $CLUSTERNAME/$CLUSTERNAME.config $CLUSTERNAME/inv
 git -C project-configs commit -a -m "Add ACLs for $CLUSTERNAME"
 git -C project-configs review -t $GIT_TOPIC
 
+git clone https://review.fuel-infra.org/fuel-infra/project-config
+mkdir -p project-configs/jobs/$CLUSTERNAME
+
+
