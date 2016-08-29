@@ -1,0 +1,5 @@
+#!/bin/bash
+CLUSTERNAME="mycluster"
+DNS_SERVERS="[172.18.80.136, 172.18.16.10]"
+CI_EMAIL="mmosesohn+ci@mirantis.com"
+
