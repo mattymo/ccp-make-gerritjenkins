@@ -1,0 +1,10 @@
+- project:
+  name: {{ CLUSTERNAME }}
+  jobs:
+    - '{name}-k8s-deploy'
+    - '{name}-k8s-verify'
+    - '{name}-k8s-gate'
+  ci_email: '{{ CI_EMAIL }}'
+  jenkins_server: '{{ JENKINS_SERVER }}'
+  gerrit_server: '{{ GERRIT_SERVER }}'
+  gerrit_shortname: '{{ GERRIT_SHORTNAME }}'

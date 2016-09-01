@@ -1,5 +1,11 @@
 #!/bin/bash
 CLUSTERNAME=mycluster
-DNS_SERVERS=[172.18.80.136, 172.18.16.10]
 CI_EMAIL=mmosesohn+ci@mirantis.com
-SSH_KEY_ID=e4fbb86b-0f5e-4670-a88f-c906a5e38014
+
+JENKINS_SERVER="http://jenkins-storage.ng.mirantis.net"
+
+#Required for generic gate
+DNS_SERVERS=[172.18.80.136, 172.18.16.10]
+
+#Now CLUSTERNAME-cluster-key
+#SSH_KEY_ID=e4fbb86b-0f5e-4670-a88f-c906a5e38014

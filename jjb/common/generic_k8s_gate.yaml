@@ -1,12 +1,11 @@
 - job-template:
-    name: "{{ CLUSTERNAME }}-deploy-k8s"
+    name: {name}-k8s-gate
     description: |
-      Deploy k8s cluster
-    node: installer
+      {name} MCP Installer gate job
+    node: standard
     builders:
-      - shell:
-          !include-raw 'builders/mcp-installer-deploy.sh'
-    concurrent: false
+      - shell: !include-raw builders/mcp-installer-gate.sh
+    concurrent: true
     scm:
       - openstack:
           scm-basedir: ''
@@ -18,13 +17,19 @@
           fail: false
       - ssh-agent-credentials:
           users:
-            - "{{ SSH_KEY_ID }}"
+            - "{name}-cluster-key"
+    wrappers:
+      - ng-cleanup
+    triggers:
+      - zuul
+      # Should be on new patchset
     parameters:
       # START FUEL-DEVOPS PARAMS
-      - extended-choice:
+       extended-choice:
           name: IMAGE
           description: "VM image file for k8s hosts"
-          property-file: http://jenkins-storage.ng.mirantis.net/images/images.lst
+          property-file:
+          {jenkins_server}/images/images.lst
           property-key: images
       - string:
           name: PARAM_SLAVES_COUNT
@@ -33,7 +38,7 @@
       # END FUEL-DEVOPS PARAMS
       - string:
           name: INVENTORY_REPO
-          default: "https://review.fuel-infra.org/nextgen/mcpinstaller-inventory"
+          default: "{gerrit_server}/{name}/inventory"
       - string:
           name: INVENTORY_COMMIT
           default: "master"
@@ -44,14 +49,7 @@
           name: KARGO_COMMIT
           default: "master"
       - text:
-      - text:
-          name: CUSTOM_YAML
-          description: "Copy and paste valid YAML data to customize deployment"
-          default: |
-            ---
-            hyperkube_image_tag: "v1.4.0-alpha.2-1467-g6bc62_53"
-            hyperkube_image_repo: "artifactory.ng.mirantis.net:5002/hyperkube-amd64"
-            upstream_dns_servers: "{{ DNS_SERVERS }}"
+
     publishers:
       - post-tasks:
         - matches:
@@ -60,14 +58,13 @@
           run-if-job-successful: false
           script: |
             #!/bin/bash
+
             set -ex
-            export ENV_NAME="mcp-env-$BUILD_TAG"
-            source /home/jenkins/fuel-devops-3.0/bin/activate
+
+            export ENV_NAME="env-k8s-$BUILD_TAG"
+
+            source /home/jenkins/venv-fuel-devops-3.0/bin/activate
             echo "Running on $NODE_NAME: $ENV_NAME"
-            # Uncomment for fuel-devops deployment
-            #dos.py erase $ENV_NAME
+
+            dos.py erase $ENV_NAME || true
             deactivate
-- project:
-    name: Deploy MCP Kubernetes cluster
-    jobs:
-       - "{{ CLUSTERNAME }}-deploy-k8s"
