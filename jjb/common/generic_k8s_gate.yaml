@@ -49,7 +49,10 @@
           name: KARGO_COMMIT
           default: "master"
       - text:
-
+          name: CUSTOM_YAML
+          default: |
+            ---
+            upstream_dns_servers: {DNS_SERVERS}
     publishers:
       - post-tasks:
         - matches:

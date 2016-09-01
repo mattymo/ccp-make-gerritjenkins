@@ -36,17 +36,6 @@
             pattern: '**'
 
     parameters:
-      # START FUEL-DEVOPS PARAMS
-      #- extended-choice:
-      #    name: IMAGE
-      #    description: "VM image file for k8s hosts"
-      #    property-file: http://jenkins-storage.ng.mirantis.net/images/images.lst
-      #    property-key: images
-      #- string:
-      #    name: PARAM_SLAVES_COUNT
-      #    default: '3'
-      #    description: "Number of VMs to spawn in this environment."
-      # END FUEL-DEVOPS PARAMS
       - string:
           name: INVENTORY_REPO
           default: "https://{gerrit_host}/{name}/inventory"
