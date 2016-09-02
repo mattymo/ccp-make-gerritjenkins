@@ -1,17 +1,17 @@
 - job-template:
-    name: "{name}-k8s-verify"
+    name: '{name}-k8s-verify'
     description: |
       Verify k8s cluster using e2e conformance tests
     node: installer
     builders:
       - shell:
-          !include-raw 'builders/mcp-installer-verify.sh'
+          !include-raw-escape 'builders/mcp-installer-verify.sh'
     concurrent: false
     scm:
-      - openstack:
-          scm-basedir: ''
-          scm-branch: 'master'
-          scm-repo: 'fuel-ccp-installer'
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-ccp-installer.git'
+          branches:
+            - master
     wrappers:
       - timeout:
           timeout: 7200
@@ -33,6 +33,6 @@
       - string:
           name: KARGO_COMMIT
           default: "master"
-      - hidden:
+      - string:
           name: ADMIN_IP
           default: "local"
