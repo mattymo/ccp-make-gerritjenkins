@@ -1,16 +1,16 @@
 - job-template:
-    name: {name}-k8s-gate
+    name: '{name}-k8s-gate'
     description: |
       {name} MCP Installer gate job
     node: standard
     builders:
-      - shell: !include-raw builders/mcp-installer-gate.sh
+      - shell: !include-raw-escape builders/mcp-installer-gate.sh
     concurrent: true
     scm:
-      - openstack:
-          scm-basedir: ''
-          scm-branch: 'master'
-          scm-repo: 'fuel-ccp-installer'
+      - git:
+          url: 'https://git.openstack.org/openstack/fuel-ccp-installer.git'
+          branches:
+            - master
     wrappers:
       - timeout:
           timeout: 7200
@@ -18,18 +18,22 @@
       - ssh-agent-credentials:
           users:
             - "{name}-cluster-key"
-    wrappers:
-      - ng-cleanup
     triggers:
-      - zuul
-      # Should be on new patchset
+      - gerrit:
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: 'openstack/fuel-ccp-installer'
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: 'master'
     parameters:
       # START FUEL-DEVOPS PARAMS
-       extended-choice:
+      - extended-choice:
           name: IMAGE
           description: "VM image file for k8s hosts"
-          property-file:
-          {jenkins_server}/images/images.lst
+          property-file: '{jenkins_server}/images/images.lst'
           property-key: images
       - string:
           name: PARAM_SLAVES_COUNT
@@ -52,7 +56,7 @@
           name: CUSTOM_YAML
           default: |
             ---
-            upstream_dns_servers: {DNS_SERVERS}
+            upstream_dns_servers: {dns_servers}
     publishers:
       - post-tasks:
         - matches:
