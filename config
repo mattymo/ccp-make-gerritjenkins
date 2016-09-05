@@ -1,13 +1,14 @@
 #!/bin/bash
-CLUSTERNAME=mycluster
+CLUSTERNAME=test-cluster1
 CI_EMAIL=mmosesohn+ci@mirantis.com
 
-GERRIT_SERVER=https://review.fuel-infra.org
-GERRIT_SHORTNAME=fuel-gerrit
-JENKINS_SERVER=http://jenkins-storage.ng.mirantis.net
+GERRIT_SERVER=mcp-ci.local
+GERRIT_PORT=29418
+GERRIT_USER=$USER #Change to reflect your gerrit user
+GERRIT_GIT_URL="ssh://${GERRIT_USER}@/${GERRIT_SERVER}:${GERRIT_PORT}"
+GERRIT_WEB_URL="https://$GERRIT_SERVER"
+GERRIT_SHORTNAME=mcp-ci-gerrit
+JENKINS_SERVER=http://mcp-ci.local:8082/jenkins
 
 #Required for generic gate
 DNS_SERVERS=172.18.80.136
-
-#Now CLUSTERNAME-cluster-key
-#SSH_KEY_ID=e4fbb86b-0f5e-4670-a88f-c906a5e38014

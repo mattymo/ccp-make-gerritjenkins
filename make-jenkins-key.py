@@ -10,7 +10,7 @@ log_level = getattr(logging, 'DEBUG')
 logging.basicConfig(level=log_level)
 logger = logging.getLogger()
 
-jenkins_url = os.environ.get('JENKINS_URL', 'http://ci.mcp-ci.local:8082/jenkins')
+jenkins_url = os.environ.get('JENKINS_URL', 'http://mcp-ci.local:8082/jenkins')
 secret_file = os.environ.get('SECRET_FILE', '/home/jenkins/.ssh/jenkins_mcp')
 passphrase = os.environ.get('PASSPHRASE', '')
 creds_id = os.environ.get('CLUSTERNAME', 'dummy-cluster-name')

@@ -6,18 +6,18 @@ WORKDIR=$(mktemp ./gerrit-resources-XXX)
 GIT_TOPIC="add-$CLUSTERNAME"
 
 cd $WORKDIR
-git clone https://review.fuel-infra.org/fuel-infra/jeepyb-config
-cat >> jeepyb-config/projects.yaml << EOF
--
-  project: $CLUSTERNAME/inventory
-  description: MCP k8s inventory
-  acl-config: acls/$CLUSTERNAME/inventory.config
+#git clone https://$GERRIT_SERVER/fuel-infra/jeepyb-config
+#cat >> jeepyb-config/projects.yaml << EOF
+#-
+#  project: $CLUSTERNAME/inventory
+#  description: MCP k8s inventory
+#  acl-config: acls/$CLUSTERNAME/inventory.config
+#
+#EOF
+#git -C jeepyb-config commit -a -m "Added new project $CLUSTERNAME/inventory"
+#git -C jeepyb-config review -t add-$CLUSTERNAME
 
-EOF
-git -C jeepyb-config commit -a -m "Added new project $CLUSTERNAME/inventory"
-git -C jeepyb-config review -t add-$CLUSTERNAME
-
-git clone https://review.fuel-infra.org/fuel-infra/project-configs
+git clone $GERRIT_SERVER/project-configs
 mkdir -p project-configs/$CLUSTERNAME
 cat >> project-configs/$CLUSTERNAME/$CLUSTERNAME.config << EOF
 [access "refs/*"]
