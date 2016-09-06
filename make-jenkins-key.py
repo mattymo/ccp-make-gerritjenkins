@@ -27,6 +27,7 @@ creds_desc = 'credentials for Jenkins to access Kubernetes nodes'
 cred_dict = {
     'description': creds_desc,
     'userName': '{0}-cluster-key'.format(creds_id),
+    'credential_id': '{0}-cluster-key'.format(creds_id),
     'passphrase': passphrase,
     'private_key': secret_file
 }

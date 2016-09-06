@@ -2,11 +2,9 @@
 
 . config
 
-WORKDIR=$(mktemp -d ./gerrit-resources-XXX)
 GIT_TOPIC="add-$CLUSTERNAME"
 
-cd $WORKDIR
-git clone "ssh://$GERRIT_SERVER:$GERRIT_PORT/mcp-ci/project-config"
+git clone "${GERRIT_GIT_URL}/mcp-ci/project-config"
 mkdir -p project-config/jenkins/jobs/clusters
 #common dir patch on review: https://review.fuel-infra.org/#/c/25753/
 #add it manually on custom env
@@ -15,5 +13,5 @@ cd project-config
 
 #DEBUG
 git add *
-echo git commit -a -m "New project $CLUSTERNAME"
-echo git review -t "add_cluster_$CLUSTERNAME"
+git commit -a -m "New project $CLUSTERNAME"
+git review -t "add_cluster_$CLUSTERNAME"

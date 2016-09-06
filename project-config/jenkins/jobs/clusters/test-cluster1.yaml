@@ -1,0 +1,11 @@
+- project:
+    name: test-cluster1
+    jobs:
+      - '{name}-k8s-deploy'
+      - '{name}-k8s-verify'
+      - '{name}-k8s-gate'
+    ci_email: 'mmosesohn+ci@mirantis.com'
+    jenkins_server: 'http://mcp-ci.local:8082/jenkins'
+    gerrit_server: 'mcp-ci.local'
+    gerrit_shortname: 'mcp-ci-gerrit'
+    dns_servers: '172.18.80.136'
