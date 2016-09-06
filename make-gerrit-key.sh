@@ -5,10 +5,10 @@
 . config
 
 SECRET_FILE="${SECRET_FILE:-~/keys/jenkins_mcp.pub}"
-KEY="$(cat ${SECRET_FILE})"
 ADMIN_USER="${ADMIN_USER:-admin}"
 USERNAME="${USERNAME:-mcptestuser}"
 GERRIT_HOST="${GERRIT_HOST:-review.fuel-infra.org}"
+GERRIT_PORT="${GERRIT_PORT:-29418}"
 
-ssh  -p 29418 ${ADMIN_USER}@${GERRIT_HOST} gerrit set-account \
-  ${USERNAME} --add-ssh-key "${KEY}"
+cat "${SECRET_FILE}" | ssh -p ${GERRIT_PORT} ${ADMIN_USER}@${GERRIT_HOST} \
+gerrit set-account ${USERNAME} --add-ssh-key -
