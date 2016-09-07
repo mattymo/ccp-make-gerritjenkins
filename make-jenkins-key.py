@@ -17,6 +17,9 @@ creds_id = os.environ.get('CLUSTERNAME', 'dummy-cluster-name')
 admin_user = os.environ.get('ADMIN_USER', 'admin')
 admin_pass = os.environ.get('ADMIN_PASS', 'secret')
 
+with open(secret_file, 'r') as keyfile:
+    private_key = keyfile.read()
+
 api = Jenkins(jenkins_url, username=admin_user, password=admin_pass)
 
 # Get a list of all global credentials
@@ -29,6 +32,6 @@ cred_dict = {
     'userName': '{0}-cluster-key'.format(creds_id),
     'credential_id': '{0}-cluster-key'.format(creds_id),
     'passphrase': passphrase,
-    'private_key': secret_file
+    'private_key': private_key
 }
 creds[creds_desc] = SSHKeyCredential(cred_dict)
