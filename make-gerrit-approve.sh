@@ -22,6 +22,12 @@ if [ -z "$COMMIT" ]; then
   exit 1
 fi
 
+# Get commit hash if change ID is proposed
+if [[ "$COMMIT" =~ ^Ib.* || "$COMMIT" =~ ^-?[0-9]+$ ]]; then
+  COMMIT=$(ssh -p ${GERRIT_PORT} ${GERRIT_USER}@${GERRIT_HOST} \
+gerrit query --current-patch-set change:${COMMIT} | \
+awk -F": " '/revision/ {print $2}')
+fi
 ssh -p ${GERRIT_PORT} ${GERRIT_USER}@${GERRIT_HOST} \
 gerrit review $project_opt $branch_opt \
---verified +1 --code-review +2 --submit "${COMMIT}"
+--verified +2 --code-review +2 --submit "${COMMIT}"
