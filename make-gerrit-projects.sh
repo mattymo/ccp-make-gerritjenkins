@@ -2,24 +2,23 @@
 
 . config
 
-WORKDIR=$(mktemp ./gerrit-resources-XXX)
+WORKDIR=$(mktemp -d gerrit-resources-XXX)
 GIT_TOPIC="add-$CLUSTERNAME"
 
 cd $WORKDIR
-#git clone https://$GERRIT_SERVER/fuel-infra/jeepyb-config
-#cat >> jeepyb-config/projects.yaml << EOF
-#-
-#  project: $CLUSTERNAME/inventory
-#  description: MCP k8s inventory
-#  acl-config: acls/$CLUSTERNAME/inventory.config
-#
-#EOF
-#git -C jeepyb-config commit -a -m "Added new project $CLUSTERNAME/inventory"
-#git -C jeepyb-config review -t add-$CLUSTERNAME
+git clone $GERRIT_GIT_URL/mcp-ci/project-config
 
-git clone $GERRIT_SERVER/project-configs
-mkdir -p project-configs/$CLUSTERNAME
-cat >> project-configs/$CLUSTERNAME/$CLUSTERNAME.config << EOF
+#TODO: Alphabetical order
+cat >> project-config/gerrit/projects.yaml << EOF
+-
+  project: $CLUSTERNAME/inventory
+  description: MCP k8s inventory
+  acl-config: acls/$CLUSTERNAME/inventory.config
+
+EOF
+
+mkdir -p project-config/gerrit/acls/$CLUSTERNAME
+cat > project-config/gerrit/acls/$CLUSTERNAME/inventory.config << EOF
 [access "refs/*"]
     read = group Anonymous Users
     read = group Registered Users
@@ -57,37 +56,9 @@ cat >> project-configs/$CLUSTERNAME/$CLUSTERNAME.config << EOF
     mergeContent = true
 EOF
 
-cat >> project-configs/$CLUSTERNAME/inventory.config << EOF
-[access "refs/heads/*"]
-    abandon = group ${CLUSTERNAME}-core
-    abandon = group Change Owner
-    create = group ${CLUSTERNAME}-core
-    label-Code-Review = -2..+2 group ${CLUSTERNAME}-core
-    label-Code-Review = -1..+1 group Registered Users
-    label-Verified = -2..+2 group Non-Interactive Users
-    label-Verified = -2..+2 group ${CLUSTERNAME}-core
-    label-Workflow = -1..+1 group ${CLUSTERNAME}-core
-    rebase = group ${CLUSTERNAME}-core
-    rebase = group Change Owner
-    submit = group devops-core
-    submit = group ${CLUSTERNAME}-ci
-    submit = group ${CLUSTERNAME}-core
-[access "refs/tags/*"]
-    create = group ${CLUSTERNAME}-core
-    pushSignedTag = group ${CLUSTERNAME}-core
-    pushMerge = group ${CLUSTERNAME}-core
-[receive]
-    requireChangeId = true
-[submit]
-    mergeContent = true
-[access]
-    inheritFrom = $CLUSTERNAME
-EOF
-git -C project-configs git add $CLUSTERNAME/$CLUSTERNAME.config $CLUSTERNAME/inventory.config 
-git -C project-configs commit -a -m "Add ACLs for $CLUSTERNAME"
-git -C project-configs review -t $GIT_TOPIC
+git -C project-config add gerrit/acls/$CLUSTERNAME/inventory.config
+git -C project-config commit -a -m "Add project and ACLs for $CLUSTERNAME"
+git -C project-config review -t $GIT_TOPIC
 
-git clone https://review.fuel-infra.org/fuel-infra/project-config
-mkdir -p project-configs/jobs/$CLUSTERNAME
-
-
+#cd -
+#rm -rf $WORKDIR
