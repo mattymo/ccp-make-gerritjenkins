@@ -1,14 +1,27 @@
 #!/bin/bash -e
+# If a commit is not specified, mark the unmerged commits both
+# "Verified +1" and "Code-Review +2" and submit them for merging.
 
 . config
 
-ADMIN_USER="${ADMIN_USER:-admin}"
-GERRIT_HOST="${GERRIT_HOST:-review.fuel-infra.org}"
+GERRIT_USER="${GERRIT_USER:-admin}"
+GERRIT_HOST="${GERRIT_HOST:-mcp-ci.local}"
 GERRIT_PORT="${GERRIT_PORT:-29418}"
-BRANCH="${BRANCH:-origin/master}"
+PROJECT="${PROJECT}" # Optional
+BRANCH="${BRANCH}" # Optional
+COMMIT="${COMMIT:-$1}" # Required
 
-[ "${COMMIT}" -a "${PROJECT}" ] || exit 1
+if [ -n "$PROJECT" ]; then
+  project_opt="--project ${PROJECT}"
+fi
+if [ -n "$BRANCH" ]; then
+  branch_opt="--branch ${BRANCH}"
+fi
+if [ -n "$COMMIT" ]; then
+  echo "ERROR: specify a commit ref by hash or change ID" 1>&2
+  exit 1
+fi
 
-ssh -p ${GERRIT_PORT} ${ADMIN_USER}@${GERRIT_HOST} \
-gerrit review --project ${PROJECT} --branch ${BRANCH} \
+ssh -p ${GERRIT_PORT} ${GERRIT_USER}@${GERRIT_HOST} \
+gerrit review $project_opt $branch_opt \
 --verified +1 --code-review +2 --submit "${COMMIT}"
