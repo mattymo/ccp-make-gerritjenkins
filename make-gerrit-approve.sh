@@ -11,13 +11,13 @@ PROJECT="${PROJECT}" # Optional
 BRANCH="${BRANCH}" # Optional
 COMMIT="${COMMIT:-$1}" # Required
 
-if [ -n "$PROJECT" ]; then
+if [ -z "$PROJECT" ]; then
   project_opt="--project ${PROJECT}"
 fi
-if [ -n "$BRANCH" ]; then
+if [ -z "$BRANCH" ]; then
   branch_opt="--branch ${BRANCH}"
 fi
-if [ -n "$COMMIT" ]; then
+if [ -z "$COMMIT" ]; then
   echo "ERROR: specify a commit ref by hash or change ID" 1>&2
   exit 1
 fi
