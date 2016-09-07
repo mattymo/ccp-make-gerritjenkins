@@ -11,10 +11,10 @@ PROJECT="${PROJECT}" # Optional
 BRANCH="${BRANCH}" # Optional
 COMMIT="${COMMIT:-$1}" # Required
 
-if [ -z "$PROJECT" ]; then
+if [ -n "$PROJECT" ]; then
   project_opt="--project ${PROJECT}"
 fi
-if [ -z "$BRANCH" ]; then
+if [ -n "$BRANCH" ]; then
   branch_opt="--branch ${BRANCH}"
 fi
 if [ -z "$COMMIT" ]; then
