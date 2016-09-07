@@ -1,7 +1,4 @@
 #!/bin/bash -e
-# Env vars expected:
-# SECRET_FILE, ADMIN_USER, GERRIT_HOST,
-# USERNAME, USERMAIL, USERFULLNAME
 
 . config
 
